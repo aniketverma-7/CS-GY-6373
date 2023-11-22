@@ -1,9 +1,11 @@
-import Data.List (tails)
 import Data.Map (Map, (!), insert, member, empty)
 
+-- count_sum :: [Int] -> Int -> [[Int]]
 countSum :: [Int] -> Int -> [[Int]]
-countSum lst targetSum= go lst empty []
+countSum lst sum = go lst empty []
   where
+    targetSum = 12
+
     go :: [Int] -> Map Int Int -> [[Int]] -> [[Int]]
     go [] _ acc = acc
     go (x:xs) seenPairs acc =
@@ -14,9 +16,14 @@ countSum lst targetSum= go lst empty []
             True -> go xs seenPairs (acc ++ [[x, targetSum - x]])
             False -> go xs (insert x (targetSum - x) seenPairs) acc
 
-countSumExtended :: [Int] -> [(Int, [Int])]
-countSumExtended lst =
-  concat [(countSum lst (i + j)) | (i:rest) <- tails lst, j <- rest]
+-- count_sum_extended :: [Int] -> [[Int]]
+countSumExtended :: [Int] -> [[Int]]
+countSumExtended l =
+  concat [[i + j] ++ sublist | j <- drop (i + 1) l, sublist <- countSum l (i + j)]
 
+-- main :: IO ()
 main :: IO ()
-main = mapM_ print (countSumExtended [1, 2, 3, 4])
+main = do
+  results <- countSumExtended [1, 2, 3, 4]
+  for r <- results do
+    putStrLn $ "[" ++ show (r !! 0) ++ ", " ++ show (r !! 1) ++ "]"
