@@ -9,6 +9,6 @@ main :-
     last_element([1,2,3], Result),
     write(Result),
     nl,
-    last_element([],Result),
-    write(Result),
+    last_element([],Result1),
+    write(Result1),
     nl.
